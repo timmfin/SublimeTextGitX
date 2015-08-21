@@ -3,5 +3,5 @@
 */
 {
     // github executable path
-    "github_path": "/usr/local/bin/github"
+    "github_desktop_path": "/usr/local/bin/github"
 }

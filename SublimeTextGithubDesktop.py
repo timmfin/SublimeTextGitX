@@ -13,7 +13,7 @@ class GitDesktopCommand():
             sublime.status_message(__name__ + ': No place to open github to')
             return False
 
-class GitxOpenCommand(sublime_plugin.WindowCommand, GitDesktopCommand):
+class GithubDesktopOpenCommand(sublime_plugin.WindowCommand, GitDesktopCommand):
     def is_enabled(self):
         return True
 
@@ -25,20 +25,20 @@ class GitxOpenCommand(sublime_plugin.WindowCommand, GitDesktopCommand):
             path = os.path.dirname(path)
 
         settings = sublime.load_settings('Base File.sublime-settings')
-        github_path = settings.get('github_path', '/usr/local/bin/github')
-        if not os.path.isfile(github_path):
+        github_desktop_path = settings.get('github_desktop_path', '/usr/local/bin/github')
+        if not os.path.isfile(github_desktop_path):
             mac_path = '/Applications/GitHub Desktop.app'
             if os.path.isdir(mac_path):
-                github_path = mac_path + "/Contents/MacOS/github_cli"
+                github_desktop_path = mac_path + "/Contents/MacOS/github_cli"
             else:
-                github_path = None
+                github_desktop_path = None
 
-        if github_path in ['', None]:
+        if github_desktop_path in ['', None]:
             sublime.error_message(__name__ + ': github desktop executable path not set, incorrect or no github?')
             return False
 
         try:
             encoding = locale.getpreferredencoding(do_setlocale=True) or 'UTF-8'
-            p = subprocess.Popen([github_path], cwd=path.encode(encoding), shell=True)
+            subprocess.Popen([github_desktop_path], cwd=path.encode(encoding), shell=True)
         except Exception as e:
             sublime.error_message(__name__ + ' Error launching github desktop ' + e.message)

@@ -38,7 +38,7 @@ Configuration
 
 Additional settings can be configured in the User File Settings:
 
-``github_path``: the path to the ``github`` executable (default: ``"/usr/local/bin/github"``)
+``github_desktop_path``: the path to the ``github`` executable (default: ``"/usr/local/bin/github"``)
 
 Changelog
 ---------
