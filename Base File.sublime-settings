@@ -1,7 +1,7 @@
 /*
-    SublimeTextGitX default settings
+    SublimeTextGithubDesktop default settings
 */
 {
-    // gitx executable path
-    "gitx_path": "/usr/local/bin/gitx"
+    // github executable path
+    "github_path": "/usr/local/bin/github"
 }

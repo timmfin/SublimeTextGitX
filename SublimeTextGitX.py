@@ -3,17 +3,17 @@ import os
 import subprocess
 import sublime, sublime_plugin
 
-class GitXCommand():
+class GitDesktopCommand():
     def get_path(self):
         if self.window.active_view():
             return self.window.active_view().file_name()
         elif self.window.folders():
             return self.window.folders()[0]
         else:
-            sublime.status_message(__name__ + ': No place to open GitX to')
+            sublime.status_message(__name__ + ': No place to open github to')
             return False
 
-class GitxOpenCommand(sublime_plugin.WindowCommand, GitXCommand):
+class GitxOpenCommand(sublime_plugin.WindowCommand, GitDesktopCommand):
     def is_enabled(self):
         return True
 
@@ -23,26 +23,22 @@ class GitxOpenCommand(sublime_plugin.WindowCommand, GitXCommand):
             return
         if os.path.isfile(path):
             path = os.path.dirname(path)
-    
+
         settings = sublime.load_settings('Base File.sublime-settings')
-        gitx_path = settings.get('gitx_path', '/usr/local/bin/gitx')
-
-        if not os.path.isfile(gitx_path):
-            mac_path = '/Applications/GitX.app'
+        github_path = settings.get('github_path', '/usr/local/bin/github')
+        if not os.path.isfile(github_path):
+            mac_path = '/Applications/GitHub Desktop.app'
             if os.path.isdir(mac_path):
-                gitx_path = mac_path
+                github_path = mac_path + "/Contents/MacOS/github_cli"
             else:
-                gitx_path = None
+                github_path = None
 
-        if gitx_path in ['', None]:
-            sublime.error_message(__name__ + ': gitx executable path not set, incorrect or no gitx?')
+        if github_path in ['', None]:
+            sublime.error_message(__name__ + ': github desktop executable path not set, incorrect or no github?')
             return False
 
-        if gitx_path.endswith(".app"):
-            subprocess.call(['open', '-a', gitx_path, path])
-        else:
-            try:
-                encoding = locale.getpreferredencoding(do_setlocale=True) or 'UTF-8'
-                p = subprocess.Popen([gitx_path], cwd=path.encode(encoding), shell=True)
-            except Exception as e:
-                sublime.error_message(__name__ + ' Error launching gitx ' + e.message)
+        try:
+            encoding = locale.getpreferredencoding(do_setlocale=True) or 'UTF-8'
+            p = subprocess.Popen([github_path], cwd=path.encode(encoding), shell=True)
+        except Exception as e:
+            sublime.error_message(__name__ + ' Error launching github desktop ' + e.message)
