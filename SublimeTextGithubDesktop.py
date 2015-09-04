@@ -30,15 +30,11 @@ class GithubDesktopOpenCommand(sublime_plugin.WindowCommand, GitDesktopCommand):
         # Find the root repo folder (trying to be ok with windows paths)
         while True:
             git_config_dir = os.path.join(path, '.git')
-            # print "\n", "git_config_dir: %s\n" % (git_config_dir)
 
             if not path or path == last_path:
                 break
             elif os.path.isdir(git_config_dir):
                 break
-
-            # print "\n", "last_path: %s\n" % (last_path)
-            # print "\n", "path: %s\n" % (path)
 
             last_path = path
             path = os.path.dirname(path)
