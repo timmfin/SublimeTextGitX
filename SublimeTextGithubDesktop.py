@@ -18,11 +18,34 @@ class GithubDesktopOpenCommand(sublime_plugin.WindowCommand, GitDesktopCommand):
         return True
 
     def run(self, *args):
-        path = self.get_path()
+        original_path = path = self.get_path()
         if not path:
             return
         if os.path.isfile(path):
             path = os.path.dirname(path)
+
+        last_path = None
+        git_config_dir = None
+
+        # Find the root repo folder (trying to be ok with windows paths)
+        while True:
+            git_config_dir = os.path.join(path, '.git')
+            # print "\n", "git_config_dir: %s\n" % (git_config_dir)
+
+            if not path or path == last_path:
+                break
+            elif os.path.isdir(git_config_dir):
+                break
+
+            # print "\n", "last_path: %s\n" % (last_path)
+            # print "\n", "path: %s\n" % (path)
+
+            last_path = path
+            path = os.path.dirname(path)
+
+        if path == last_path or not os.path.isdir(git_config_dir):
+            sublime.error_message(__name__ + ': couldn\'t find any git repo at or above "' + original_path + '"')
+
 
         settings = sublime.load_settings('Base File.sublime-settings')
         github_desktop_path = settings.get('github_desktop_path', '/usr/local/bin/github')
